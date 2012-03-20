@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MDN meets MGM</title>
+  <meta type="description" content="Making a MGM style intro with the MDN logo and CSS transitions">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<style>
+  * { 
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-size: 15px;
+    font-family: helvetica, arial, sans-serif;
+  }
+  footer, section, header, aside, figure {
+    display: block;
+  }
+  section{
+    position: relative;
+  }
+  #ring{
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  #dino{
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    z-index: 2;
+    -webkit-transition: 1s;
+       -moz-transition: 1s;
+        -ms-transition: 1s;
+         -o-transition: 1s;
+            transition: 1s;
+    -webkit-transform: scale(0,0) rotate(0);
+       -moz-transform: scale(0,0) rotate(0);
+        -ms-transform: scale(0,0) rotate(0);
+         -o-transform: scale(0,0) rotate(0);
+            transform: scale(0,0) rotate(0);
+  }
+ section.on #dino, section.roar #dino {
+    -webkit-transform: scale(1,1) rotate(360deg);
+       -moz-transform: scale(1,1) rotate(360deg);
+        -ms-transform: scale(1,1) rotate(360deg);
+         -o-transform: scale(1,1) rotate(360deg);
+            transform: scale(1,1) rotate(360deg);
+  }
+  #jaw {
+    position: absolute;
+    top: 108px;
+    left: 129px;
+    z-index: 3;
+    -webkit-transform-origin: 10px 10px;
+       -moz-transform-origin: 10px 10px;
+        -ms-transform-origin: 10px 10px;
+         -o-transform-origin: 10px 10px;
+            transform-origin: 10px 10px;
+    -webkit-transition: 1s;
+       -moz-transition: 1s;
+        -ms-transition: 1s;
+         -o-transition: 1s;
+            transition: 1s;
+  }
+  section.roar #jaw{
+    -webkit-transform: rotate(4deg);
+       -moz-transform: rotate(4deg);
+        -ms-transform: rotate(4deg);
+         -o-transform: rotate(4deg);
+            transform: rotate(4deg);
+  }
+  .animate {
+    opacity: 0;
+    -webkit-transition: 1s;
+       -moz-transition: 1s;
+        -ms-transition: 1s;
+         -o-transition: 1s;
+            transition: 1s;
+  }
+  .animate.show {
+    opacity: 1;
+  }
+  footer {
+    margin: 100px 0;
+    font-size: 10px;
+  }
+  button {
+    margin-left: 80px;
+    border: none;
+    border-radius: 5px;
+    background: #369;
+    color: #fff;
+    font-size: 24px;
+  }
+</style>
+</head>
+<body>
+  <audio>
+    <source src="jingle.mp3" type="audio/mp3"></source>
+    <source src="jingle.ogg" type="audio/ogg"></source>
+  </audio>
+  <section>
+    <img src="ring.png" id="ring" width="305" height="305" alt="Ring">
+    <div id="dino">
+      <img src="dino.png" width="305" height="305" alt="Dino">
+      <img src="jaw.png" id="jaw" width="116" height="77" alt="Jaw">
+    </div>
+  </section>
+  <p class="animate"><button onclick="playagain()">Play again</button></p>
+  <footer>
+    <p>Written by 
+      <a href="http://christianheilmann.com/">Chris Heilmann</a> 
+      (<a href="http://twitter.com/codepo8">@codepo8</a>), sounds: <a href="http://www.freesound.org/people/Nick-Nac/sounds/108248/">Chinese Fanfare  by Nick-Nack</a> and <a href="http://www.freesound.org/people/CGEffex/sounds/98337/">Roar by CGEffex</a>, original logo by <a href="http://www.flickr.com/photos/intothefuzz/4402972804/in/photostream/">John Slater</a>.
+    </p>
+</footer>
+<script>
+var a = document.querySelector('audio'),
+    s = document.querySelector('section'),
+    an = document.querySelector('.animate'),
+    mustroar = mustshow = true,
+    done = false;
+    a.volume = 0.4;
+    
+a.addEventListener( 'timeupdate', function( ev ) {
+  if ( a.currentTime > 0.5 && mustshow ) {
+      s.className = 'on';
+      mustshow = false;
+  };
+  if( a.currentTime > 3.0 && mustroar ) {
+      s.className += ' roar';
+      mustroar = false;
+  };
+  if( a.currentTime > 5.2 ) {
+      s.className = 'on';
+  };
+  if( a.ended ) {
+    s.className = 'on';
+    done = true;
+    mustroar = mustshow = true;
+    a.currentTime = 0;
+    a.pause();
+    an.classList.add('show');
+  }
+}, false );
+
+function playagain() {
+  s.className = '';
+  done = true;
+  mustroar = mustshow = true;
+  a.currentTime = 0;
+  a.play();
+}
+window.addEventListener('load',function(){a.play();},false);
+</script>
+</body>
+</html>
